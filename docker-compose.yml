@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: recommender_app
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CACHE_TTL_SECONDS=300
+      - ARTIFACT_DIR=artifacts
+    volumes:
+      - ./artifacts:/app/artifacts
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7
+    container_name: recommender_redis
+    ports:
+      - "6379:6379"
+
+  prometheus:
+    image: prom/prometheus
+    container_name: recommender_prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - app
+
+  grafana:
+    image: grafana/grafana
+    container_name: recommender_grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
