@@ -7,7 +7,7 @@ from app.middleware.request_middleware import RequestMiddleware
 
 app = FastAPI(
     title="Advanced Recommender V2",
-    version="2.0.0",
+    version="2.0.1",
 )
 
 #app.add_middleware(RequestMiddleware)
